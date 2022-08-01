@@ -4,8 +4,7 @@ Congratulations! You have been hired by Access Camp and for your first task, you
 have been tasked with building out a website to log campers with their
 activities.
 
-Your task is to build out the Rails API to add the functionality described in
-the deliverables below.
+Your task is to build the API according to the deliverables below.
 
 ## Setup
 
