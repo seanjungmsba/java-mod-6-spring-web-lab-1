@@ -21,6 +21,8 @@ And add the following dependencies:
 - Spring Data JPA.
 - A database of your choice (H2, Postgres, MySQL).
 
+Generate the project and open it up in IntelliJ.
+
 ## Models
 
 You need to create the following relationships:
