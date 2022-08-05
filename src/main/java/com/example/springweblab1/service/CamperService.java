@@ -27,15 +27,19 @@ public class CamperService {
         return camperRepository.save(camper);
     }
     public CamperDTO createCamperDTO(CamperDTO camperDTO) {
-        // Convert the CamperDTO to a Camper entity
-        Camper camper = mapper.map(camperDTO, Camper.class);
-        // createDTO has an id and other property
-        // activity has an id property
-        // the mapper will create a signup with the name from the createDTO
-        camper = camperRepository.save(camper);
-        // camper will now have an id and other things
-        // then we map that camper entity to a CamperDTO and then return that
-        return mapper.map(camper, CamperDTO.class);
+        try {
+            // Convert the CamperDTO to a Camper entity
+            Camper camper = mapper.map(camperDTO, Camper.class);
+            // createDTO has an id and other property
+            // activity has an id property
+            // the mapper will create a signup with the name from the createDTO
+            camper = camperRepository.save(camper);
+            // camper will now have an id and other things
+            // then we map that camper entity to a CamperDTO and then return that
+            return mapper.map(camper, CamperDTO.class);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
+        }
     }
 
     // It uses the findById method on the repository to find a record with the ID of id and returns the object.
@@ -49,7 +53,6 @@ public class CamperService {
     public List<CamperDTO> getCamperDTOs() {
         return (List<CamperDTO>) camperRepository.findAll().stream().map(camper -> mapper.map(camper, CamperDTO.class));
     }
-
     public CamperDTO getCamperDTO(Integer id) {
         Camper camper =
                 camperRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -61,7 +64,7 @@ public class CamperService {
     // We update the member instance and call the save method to persist the updated record.
     public Camper updateCamper(Integer id, Camper camperData) {
         if (!camperRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
         Camper camper = camperRepository.findById(id).get();
         camper.setAge(camperData.getAge());
@@ -74,7 +77,7 @@ public class CamperService {
         if (camperRepository.existsById(id)) {
             camperRepository.deleteById(id);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
     }
 

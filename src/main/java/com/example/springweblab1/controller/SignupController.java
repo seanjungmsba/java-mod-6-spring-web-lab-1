@@ -6,6 +6,7 @@ import com.example.springweblab1.dto.SignupDTO;
 import com.example.springweblab1.model.Member;
 import com.example.springweblab1.model.Signup;
 import com.example.springweblab1.repository.SignupRepository;
+import com.example.springweblab1.service.ActivityService;
 import com.example.springweblab1.service.MemberService;
 import com.example.springweblab1.service.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class SignupController {
     // The SignupService object is injected automatically by Spring into the controller, so we can use it in the class.
     @Autowired
     private SignupService signupService;
+
+    @Autowired
+    private ActivityService activityService;
 
     //////////////////////////////////////////////////////////////
 
@@ -49,9 +53,9 @@ public class SignupController {
 //        return signupService.getSignups();
 //    }
 
-    @GetMapping("/signups")
-    public List<SignupDTO> readSignups() {
-        return signupService.getSignupDTOs();
+    @GetMapping("/signups") // If the Signup is created successfully, send back a response with the data related to the Activity
+    public List<ActivityDTO> readSignups() {
+        return activityService.getActivityDTOs();
     }
 
     // The {signupId} in the @GetMapping value is a dynamic value which takes on the value of the client’s request path parameter.
@@ -62,9 +66,9 @@ public class SignupController {
 //    public Signup readSignup(@PathVariable(value = "signupId") Integer id) {
 //        return signupService.getSignup(id);
 //    }
-    @GetMapping("/signups/{signupId}")
-    public SignupDTO readSignup(@PathVariable(value = "signupId") Integer id) {
-        return signupService.getSignupDTO(id);
+    @GetMapping("/signups/{signupId}") // If the Signup is created successfully, send back a response with the data related to the Activity
+    public ActivityDTO readSignup(@PathVariable(value = "signupId") Integer id) {
+        return activityService.getActivityDTO(id);
     }
 
     // The @PutMapping is a shorthand for the @RequestMapping(value="/signups/{signupId}", method=RequestMethod.PUT).

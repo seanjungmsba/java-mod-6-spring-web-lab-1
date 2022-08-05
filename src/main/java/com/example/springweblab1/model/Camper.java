@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class Camper {
     @Id
+    @GeneratedValue
     private int id;
     @NotNull
     @NotBlank

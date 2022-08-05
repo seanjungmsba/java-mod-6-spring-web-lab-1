@@ -31,15 +31,21 @@ public class SignupService {
     }
 
     public SignupDTO createSignupDTO(SignupDTO createDTO) {
-        // Convert the SignupDTO to a Signup entity
-        Signup signup = mapper.map(createDTO, Signup.class);
-        // createDTO has an id and other property
-        // signup has an id property
-        // the mapper will create a signup with the name from the createDTO
-        signup = signupRepository.save(signup);
-        // signup will now have an id and a time
-        // then we map that signup entity to a SignupDTO and then return that
-        return mapper.map(signup, SignupDTO.class);
+
+        try {
+            // Convert the SignupDTO to a Signup entity
+            Signup signup = mapper.map(createDTO, Signup.class);
+            // createDTO has an id and other property
+            // signup has an id property
+            // the mapper will create a signup with the name from the createDTO
+            signup = signupRepository.save(signup);
+            // signup will now have an id and a time
+            // then we map that signup entity to a SignupDTO and then return that
+            return mapper.map(signup, SignupDTO.class);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
+        }
+
     }
 
     // It uses the findById method on the repository to find a record with the ID of id and returns the object.
@@ -64,7 +70,7 @@ public class SignupService {
     // We update the member instance and call the save method to persist the updated record.
     public Signup updateSignup(Integer id, Signup signupData) {
         if (!signupRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
         Signup signup = signupRepository.findById(id).get();
         signup.setTime(signupData.getTime());
@@ -78,7 +84,7 @@ public class SignupService {
         if (signupRepository.existsById(id)) {
             signupRepository.deleteById(id);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
     }
 }

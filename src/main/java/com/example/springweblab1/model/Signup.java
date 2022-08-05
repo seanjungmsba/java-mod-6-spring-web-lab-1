@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 public class Signup {
     @Id
+    @GeneratedValue
     private int id;
     @Min(value = 0)
     @Max(value = 23)

@@ -25,17 +25,22 @@ public class ActivityService {
     public Activity createActivity(Activity activity) {
         return activityRepository.save(activity);
     }
-
     public ActivityDTO createActivityDTO(ActivityDTO createDTO) {
-        // Convert the ActivityDTO to an Activity entity
-        Activity activity = mapper.map(createDTO, Activity.class);
-        // createDTO has an id and other property
-        // activity has an id property
-        // the mapper will create a signup with the name from the createDTO
-        activity = activityRepository.save(activity);
-        // signup will now have an id and a time
-        // then we map that signup entity to a ActivityDTO and then return that
-        return mapper.map(activity, ActivityDTO.class);
+
+        try {
+            // Convert the ActivityDTO to an Activity entity
+            Activity activity = mapper.map(createDTO, Activity.class);
+            // createDTO has an id and other property
+            // activity has an id property
+            // the mapper will create a signup with the name from the createDTO
+            activity = activityRepository.save(activity);
+            // signup will now have an id and a time
+            // then we map that signup entity to a ActivityDTO and then return that
+            return mapper.map(activity, ActivityDTO.class);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
+        }
+
     }
 
     // It uses the findById method on the repository to find a record with the ID of id and returns the object.
@@ -61,7 +66,7 @@ public class ActivityService {
     // We update the member instance and call the save method to persist the updated record.
     public Activity updateActivity(Integer id, Activity activityData) {
         if (!activityRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
         Activity activity = activityRepository.findById(id).get();
         activity.setActivityName(activityData.getActivityName());
@@ -75,7 +80,7 @@ public class ActivityService {
         if (activityRepository.existsById(id)) {
             activityRepository.deleteById(id);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
     }
 }

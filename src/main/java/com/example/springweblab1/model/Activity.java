@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 public class Activity {
     @Id
+    @GeneratedValue
     private int id;
     @NotNull
     @NotBlank
