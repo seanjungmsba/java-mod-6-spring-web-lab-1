@@ -1,16 +1,11 @@
 package com.example.springweblab1.controller;
 
 import com.example.springweblab1.dto.ActivityDTO;
-import com.example.springweblab1.dto.CamperDTO;
 import com.example.springweblab1.dto.SignupDTO;
-import com.example.springweblab1.model.Member;
 import com.example.springweblab1.model.Signup;
-import com.example.springweblab1.repository.SignupRepository;
 import com.example.springweblab1.service.ActivityService;
-import com.example.springweblab1.service.MemberService;
 import com.example.springweblab1.service.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,7 +48,8 @@ public class SignupController {
 //        return signupService.getSignups();
 //    }
 
-    @GetMapping("/signups") // If the Signup is created successfully, send back a response with the data related to the Activity
+    @GetMapping("/signups")
+    // If the Signup is created successfully, send back a response with the data related to the Activity
     public List<ActivityDTO> readSignups() {
         return activityService.getActivityDTOs();
     }
@@ -66,7 +62,8 @@ public class SignupController {
 //    public Signup readSignup(@PathVariable(value = "signupId") Integer id) {
 //        return signupService.getSignup(id);
 //    }
-    @GetMapping("/signups/{signupId}") // If the Signup is created successfully, send back a response with the data related to the Activity
+    @GetMapping("/signups/{signupId}")
+    // If the Signup is created successfully, send back a response with the data related to the Activity
     public ActivityDTO readSignup(@PathVariable(value = "signupId") Integer id) {
         return activityService.getActivityDTO(id);
     }
@@ -83,5 +80,10 @@ public class SignupController {
     @DeleteMapping("/signups/{signupId}")
     public void deleteSignup(@PathVariable(value = "signupId") Integer id) {
         signupService.deleteSignup(id);
+    }
+
+    @DeleteMapping("/signups")
+    public void deleteAllSignups() {
+        signupService.deleteAllSignups();
     }
 }

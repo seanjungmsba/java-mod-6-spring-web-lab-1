@@ -12,5 +12,5 @@ public class ActivityDTO {
     private int id;
     private String activityName;
     private int difficulty;
-    private List<Signup> signups = new ArrayList<>();
+    private List<Signup> signups;
 }

@@ -1,9 +1,7 @@
 package com.example.springweblab1.service;
 
 import com.example.springweblab1.dto.SignupDTO;
-import com.example.springweblab1.model.Member;
 import com.example.springweblab1.model.Signup;
-import com.example.springweblab1.repository.ActivityRepository;
 import com.example.springweblab1.repository.SignupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SignupService {
@@ -19,9 +18,8 @@ public class SignupService {
     // The SignupRepository object is automatically created and injected by Spring into the SignupService class because of the @Autowired annotation.
     @Autowired
     SignupRepository signupRepository;
-
     @Autowired
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,14 +32,14 @@ public class SignupService {
 
         try {
             // Convert the SignupDTO to a Signup entity
-            Signup signup = mapper.map(createDTO, Signup.class);
+            Signup signup = modelMapper.map(createDTO, Signup.class);
             // createDTO has an id and other property
             // signup has an id property
             // the mapper will create a signup with the name from the createDTO
             signup = signupRepository.save(signup);
             // signup will now have an id and a time
             // then we map that signup entity to a SignupDTO and then return that
-            return mapper.map(signup, SignupDTO.class);
+            return modelMapper.map(signup, SignupDTO.class);
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
         }
@@ -57,12 +55,12 @@ public class SignupService {
     }
 
     public List<SignupDTO> getSignupDTOs() {
-        return (List<SignupDTO>) signupRepository.findAll().stream().map(signup -> mapper.map(signup, SignupDTO.class));
+        return signupRepository.findAll().stream().map(signup -> modelMapper.map(signup, SignupDTO.class)).collect(Collectors.toList());
     }
     public SignupDTO getSignupDTO(Integer id) {
         Signup signup =
                 signupRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return mapper.map(signup, SignupDTO.class);
+        return modelMapper.map(signup, SignupDTO.class);
     }
 
     // We can’t simply use a default method for this method and have to add some custom method instead.
@@ -86,5 +84,9 @@ public class SignupService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
+    }
+
+    public void deleteAllSignups() {
+        signupRepository.deleteAll();
     }
 }

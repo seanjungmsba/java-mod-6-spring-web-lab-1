@@ -1,8 +1,6 @@
 package com.example.springweblab1.service;
 
-import com.example.springweblab1.dto.ActivityDTO;
 import com.example.springweblab1.dto.CamperDTO;
-import com.example.springweblab1.model.Activity;
 import com.example.springweblab1.model.Camper;
 import com.example.springweblab1.repository.CamperRepository;
 import org.modelmapper.ModelMapper;
@@ -12,15 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CamperService {
 
     // The CamperRepository object is automatically created and injected by Spring into the CamperService class because of the @Autowired annotation.
     @Autowired
     CamperRepository camperRepository;
-
     @Autowired
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
 
     // This method uses the default save method on the repository object to persist the member in the database.
     public Camper createCamper(Camper camper) {
@@ -29,14 +28,14 @@ public class CamperService {
     public CamperDTO createCamperDTO(CamperDTO camperDTO) {
         try {
             // Convert the CamperDTO to a Camper entity
-            Camper camper = mapper.map(camperDTO, Camper.class);
+            Camper camper = modelMapper.map(camperDTO, Camper.class);
             // createDTO has an id and other property
             // activity has an id property
             // the mapper will create a signup with the name from the createDTO
             camper = camperRepository.save(camper);
             // camper will now have an id and other things
             // then we map that camper entity to a CamperDTO and then return that
-            return mapper.map(camper, CamperDTO.class);
+            return modelMapper.map(camper, CamperDTO.class);
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
         }
@@ -51,12 +50,12 @@ public class CamperService {
     }
 
     public List<CamperDTO> getCamperDTOs() {
-        return (List<CamperDTO>) camperRepository.findAll().stream().map(camper -> mapper.map(camper, CamperDTO.class));
+        return camperRepository.findAll().stream().map(camper -> modelMapper.map(camper, CamperDTO.class)).collect(Collectors.toList());
     }
     public CamperDTO getCamperDTO(Integer id) {
         Camper camper =
                 camperRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return mapper.map(camper, CamperDTO.class);
+        return modelMapper.map(camper, CamperDTO.class);
     }
 
     // We can’t simply use a default method for this method and have to add some custom method instead.
@@ -79,6 +78,10 @@ public class CamperService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
+    }
+
+    public void deleteAllCampers() {
+        camperRepository.deleteAll();
     }
 
 }

@@ -10,12 +10,15 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.GenerationType.SEQUENCE;
+
 @Entity
 @Table
 @Data
 public class Camper {
     @Id
-    @GeneratedValue
+    @GeneratedValue // (strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     @NotBlank

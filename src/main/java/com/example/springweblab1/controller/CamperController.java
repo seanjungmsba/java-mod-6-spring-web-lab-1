@@ -3,8 +3,8 @@ package com.example.springweblab1.controller;
 import com.example.springweblab1.dto.CamperDTO;
 import com.example.springweblab1.model.Camper;
 import com.example.springweblab1.service.CamperService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +18,7 @@ public class CamperController {
     // The CamperService object is injected automatically by Spring into the controller, so we can use it in the class.
     @Autowired
     private CamperService camperService;
+
 
     // This method is creating the /api/campers endpoint for the POST HTTP method and persisting the data sent from the client.
     // The @PostMapping annotation is a shorthand for the @RequestMapping(value="/campers", method=RequestMethod.POST) annotation.
@@ -72,6 +73,11 @@ public class CamperController {
     @DeleteMapping("/campers/{camperId}")
     public void deleteCamper(@PathVariable(value = "camperId") Integer id) {
         camperService.deleteCamper(id);
+    }
+
+    @DeleteMapping("/campers")
+    public void deleteAllCampers() {
+        camperService.deleteAllCampers();
     }
 
 }

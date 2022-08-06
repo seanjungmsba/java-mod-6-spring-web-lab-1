@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class Activity {
     @Id
-    @GeneratedValue
+    @GeneratedValue // (strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     @NotBlank
@@ -25,7 +25,7 @@ public class Activity {
     @OneToMany(mappedBy = "activity")
     private List<Signup> signup = new ArrayList<>();
 
-    // List of signups and inside each of these there is a variable called activity,
+    // List of signups and inside each of these there is a variable named activity,
     // which maps to this OneToMany relationship is mapped by activity variable
 
 }

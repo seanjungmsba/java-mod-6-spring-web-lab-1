@@ -3,6 +3,7 @@ package com.example.springweblab1.controller;
 import com.example.springweblab1.dto.ActivityDTO;
 import com.example.springweblab1.model.Activity;
 import com.example.springweblab1.service.ActivityService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,9 @@ public class ActivityController {
     // The ActivityService object is injected automatically by Spring into the controller, so we can use it in the class.
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     // This method is creating the /api/activities endpoint for the POST HTTP method and persisting the data sent from the client.
     // The @PostMapping annotation is a shorthand for the @RequestMapping(value="/activities", method=RequestMethod.POST) annotation.
@@ -72,6 +76,11 @@ public class ActivityController {
     @DeleteMapping("/activities/{activityId}")
     public void deleteActivity(@PathVariable(value = "activityId") Integer id) {
         activityService.deleteActivity(id);
+    }
+
+    @DeleteMapping("/activities")
+    public void deleteAllActivities() {
+        activityService.deleteAllActivities();
     }
 
 }

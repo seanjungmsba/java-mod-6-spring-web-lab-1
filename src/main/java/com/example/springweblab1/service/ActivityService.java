@@ -1,9 +1,7 @@
 package com.example.springweblab1.service;
 
 import com.example.springweblab1.dto.ActivityDTO;
-import com.example.springweblab1.dto.SignupDTO;
 import com.example.springweblab1.model.Activity;
-import com.example.springweblab1.model.Signup;
 import com.example.springweblab1.repository.ActivityRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ActivityService {
 
@@ -19,7 +19,7 @@ public class ActivityService {
     @Autowired
     ActivityRepository activityRepository;
     @Autowired
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
 
     // This method uses the default save method on the repository object to persist the member in the database.
     public Activity createActivity(Activity activity) {
@@ -29,14 +29,14 @@ public class ActivityService {
 
         try {
             // Convert the ActivityDTO to an Activity entity
-            Activity activity = mapper.map(createDTO, Activity.class);
+            Activity activity = modelMapper.map(createDTO, Activity.class);
             // createDTO has an id and other property
             // activity has an id property
             // the mapper will create a signup with the name from the createDTO
             activity = activityRepository.save(activity);
             // signup will now have an id and a time
             // then we map that signup entity to a ActivityDTO and then return that
-            return mapper.map(activity, ActivityDTO.class);
+            return modelMapper.map(activity, ActivityDTO.class);
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
         }
@@ -52,13 +52,13 @@ public class ActivityService {
     }
 
     public List<ActivityDTO> getActivityDTOs() {
-        return (List<ActivityDTO>) activityRepository.findAll().stream().map(activity -> mapper.map(activity, ActivityDTO.class));
+        return activityRepository.findAll().stream().map(activity -> modelMapper.map(activity, ActivityDTO.class)).collect(Collectors.toList());
     }
 
     public ActivityDTO getActivityDTO(Integer id) {
         Activity activity =
                 activityRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return mapper.map(activity, ActivityDTO.class);
+        return modelMapper.map(activity, ActivityDTO.class);
     }
 
     // We can’t simply use a default method for this method and have to add some custom method instead.
@@ -82,5 +82,9 @@ public class ActivityService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
+    }
+
+    public void deleteAllActivities() {
+        activityRepository.deleteAll();
     }
 }
