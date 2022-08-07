@@ -41,8 +41,6 @@ public class SignupService {
     }
 
     public SignupDTO createSignupDTO(SignupDTO signupDTO, CamperDTO camperDTO, ActivityDTO activityDTO) {
-        // create a new Signup that is associated with an existing Camper and Activity
-
         try {
             // Convert the camperDTO to a Camper entity
             Camper camper = modelMapper.map(camperDTO, Camper.class);
@@ -63,7 +61,6 @@ public class SignupService {
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "validation errors");
         }
-
     }
 
     // It uses the findById method on the repository to find a record with the ID of id and returns the object.
@@ -107,7 +104,6 @@ public class SignupService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found");
         }
     }
-
     public void deleteAllSignups() {
         signupRepository.deleteAll();
     }
