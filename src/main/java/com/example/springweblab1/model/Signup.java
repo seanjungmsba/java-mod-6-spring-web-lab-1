@@ -1,6 +1,8 @@
 package com.example.springweblab1.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 @Entity
 @Table
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Signup {
     @Id
     @GeneratedValue // (strategy = GenerationType.IDENTITY)

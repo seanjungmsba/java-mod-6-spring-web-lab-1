@@ -1,7 +1,13 @@
 package com.example.springweblab1.service;
 
+import com.example.springweblab1.dto.ActivityDTO;
+import com.example.springweblab1.dto.CamperDTO;
 import com.example.springweblab1.dto.SignupDTO;
+import com.example.springweblab1.model.Activity;
+import com.example.springweblab1.model.Camper;
 import com.example.springweblab1.model.Signup;
+import com.example.springweblab1.repository.ActivityRepository;
+import com.example.springweblab1.repository.CamperRepository;
 import com.example.springweblab1.repository.SignupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +24,12 @@ public class SignupService {
     // The SignupRepository object is automatically created and injected by Spring into the SignupService class because of the @Autowired annotation.
     @Autowired
     SignupRepository signupRepository;
+
+    @Autowired
+    ActivityRepository activityRepository;
+
+    @Autowired
+    CamperRepository camperRepository;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -28,14 +40,22 @@ public class SignupService {
         return signupRepository.save(signup);
     }
 
-    public SignupDTO createSignupDTO(SignupDTO createDTO) {
+    public SignupDTO createSignupDTO(SignupDTO signupDTO, CamperDTO camperDTO, ActivityDTO activityDTO) {
+        // create a new Signup that is associated with an existing Camper and Activity
 
         try {
+            // Convert the camperDTO to a Camper entity
+            Camper camper = modelMapper.map(camperDTO, Camper.class);
+
+            // Convert the activityDTO to an Activity entity
+            Activity activity = modelMapper.map(activityDTO, Activity.class);
+
             // Convert the SignupDTO to a Signup entity
-            Signup signup = modelMapper.map(createDTO, Signup.class);
-            // createDTO has an id and other property
+            Signup signup = modelMapper.map(signupDTO, Signup.class);
+
+            // signupDTO has an id and other property
             // signup has an id property
-            // the mapper will create a signup with the name from the createDTO
+            // the mapper will create a signup with the name from the signupDTO
             signup = signupRepository.save(signup);
             // signup will now have an id and a time
             // then we map that signup entity to a SignupDTO and then return that
@@ -50,6 +70,7 @@ public class SignupService {
     public List<Signup> getSignups() {
         return signupRepository.findAll();
     }
+
     public Signup getSignup(Integer id) {
         return signupRepository.findById(id).get();
     }
@@ -57,6 +78,7 @@ public class SignupService {
     public List<SignupDTO> getSignupDTOs() {
         return signupRepository.findAll().stream().map(signup -> modelMapper.map(signup, SignupDTO.class)).collect(Collectors.toList());
     }
+
     public SignupDTO getSignupDTO(Integer id) {
         Signup signup =
                 signupRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

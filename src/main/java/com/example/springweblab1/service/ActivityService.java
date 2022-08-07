@@ -25,6 +25,7 @@ public class ActivityService {
     public Activity createActivity(Activity activity) {
         return activityRepository.save(activity);
     }
+
     public ActivityDTO createActivityDTO(ActivityDTO createDTO) {
 
         try {
@@ -47,6 +48,7 @@ public class ActivityService {
     public List<Activity> getActivities() {
         return activityRepository.findAll();
     }
+
     public Activity getActivity(Integer id) {
         return activityRepository.findById(id).get();
     }
@@ -87,4 +89,6 @@ public class ActivityService {
     public void deleteAllActivities() {
         activityRepository.deleteAll();
     }
+
+
 }

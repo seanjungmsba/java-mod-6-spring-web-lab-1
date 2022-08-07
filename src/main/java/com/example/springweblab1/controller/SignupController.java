@@ -1,9 +1,11 @@
 package com.example.springweblab1.controller;
 
 import com.example.springweblab1.dto.ActivityDTO;
+import com.example.springweblab1.dto.CamperDTO;
 import com.example.springweblab1.dto.SignupDTO;
 import com.example.springweblab1.model.Signup;
 import com.example.springweblab1.service.ActivityService;
+import com.example.springweblab1.service.CamperService;
 import com.example.springweblab1.service.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,11 @@ public class SignupController {
     // The SignupService object is injected automatically by Spring into the controller, so we can use it in the class.
     @Autowired
     private SignupService signupService;
-
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private CamperService camperService;
 
     //////////////////////////////////////////////////////////////
 
@@ -36,8 +40,8 @@ public class SignupController {
 //        return ResponseEntity.ok(newSignup);
 //    }
     @PostMapping("/signups")
-    public SignupDTO createSignup(@Valid @RequestBody SignupDTO signup) {
-        return signupService.createSignupDTO(signup);
+    public SignupDTO createSignup(@Valid @RequestBody SignupDTO signup, @Valid @RequestBody CamperDTO camper, @Valid @RequestBody ActivityDTO activity) {
+        return signupService.createSignupDTO(signup, camper, activity);
     }
 
     // The @GetMapping is a shorthand for the @RequestMapping(value="/signups", method=RequestMethod.GET) annotation.

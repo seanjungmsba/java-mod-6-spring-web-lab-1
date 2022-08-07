@@ -2,9 +2,12 @@ package com.example.springweblab1.controller;
 
 import com.example.springweblab1.dto.ActivityDTO;
 import com.example.springweblab1.model.Activity;
+import com.example.springweblab1.repository.ActivityRepository;
 import com.example.springweblab1.service.ActivityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +23,8 @@ public class ActivityController {
     private ActivityService activityService;
 
     @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
     // This method is creating the /api/activities endpoint for the POST HTTP method and persisting the data sent from the client.
@@ -31,6 +36,11 @@ public class ActivityController {
 //        // Notice that we are returning a ResponseEntity instead of an Activity object like earlier.
 //        // The ResponseEntity allows us to modify response information (status code, headers) before sending them back to the client.
 //        return ResponseEntity.ok(newActivity);
+//    }
+
+//    @GetMapping("/activities/nameanddifficulty")
+//    public ResponseEntity<List<Activity>> getActivityByNameAndDifficulty(@RequestParam String name, @RequestParam int difficulty) {
+//        return new ResponseEntity<>(activityRepository.findByNameAndDifficulty(name, difficulty), HttpStatus.OK);
 //    }
 
     @PostMapping("/activities")
