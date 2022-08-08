@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Table
 @Data
@@ -20,8 +22,10 @@ public class Signup {
     @Min(value = 0)
     @Max(value = 23)
     private int time;
-    private LocalDate created_at;
-    private LocalDate updated_at;
+    @Temporal(TemporalType.DATE)
+    private Date created_at;
+    @Temporal(TemporalType.DATE)
+    private Date updated_at;
     @ManyToOne
     private Activity activity;
     @ManyToOne

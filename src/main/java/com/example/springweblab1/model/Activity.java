@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Entity
 @Table
 @Data
@@ -18,16 +17,18 @@ import java.util.List;
 @AllArgsConstructor
 public class Activity {
     @Id
-    @GeneratedValue // (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     @NotBlank
-    private String activityName;
+    private String name;
     private int difficulty;
-    private LocalDate created_at;
-    private LocalDate updated_at;
+    @Temporal(TemporalType.DATE)
+    private Date created_at;
+    @Temporal(TemporalType.DATE)
+    private Date updated_at;
     @OneToMany(mappedBy = "activity")
-    private List<Signup> signup = new ArrayList<>();
+    private Set<Signup> signup = new HashSet<>();
 
     // List of signups and inside each of these there is a variable named activity,
     // which maps to this OneToMany relationship is mapped by activity variable

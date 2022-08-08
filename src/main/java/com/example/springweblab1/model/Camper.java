@@ -10,8 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -30,9 +29,11 @@ public class Camper {
     @Min(value = 8)
     @Max(value = 18)
     private int age;
-    private LocalDate created_at;
-    private LocalDate updated_at;
+    @Temporal(TemporalType.DATE)
+    private Date created_at;
+    @Temporal(TemporalType.DATE)
+    private Date updated_at;
     @OneToMany(mappedBy = "camper")
-    private List<Signup> signup = new ArrayList<>();
+    private Set<Signup> signup = new HashSet<>();
 
 }
